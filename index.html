@@ -819,7 +819,7 @@
             clearMsg('loginMsg'); var u = document.getElementById('loginUser').value.trim(); var p = document.getElementById('loginPass').value;
             if (!u || !p) { showMsg('loginMsg', '请输入账号密码', 'error'); return; }
             try {
-                const res = await fetch('/api?action=login', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: `username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}` });
+                const res = await fetch('/api?action=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: p }) });
                 const data = await safeParseJson(res); if (!res.ok) throw new Error(data.error || '登录失败');
                 if (!storageGet('tdao_cookie_backup') && storageGet('tdao_cookie')) storageSet('tdao_cookie_backup', storageGet('tdao_cookie'));
                 if (data.cookie) storageSet('tdao_cookie', data.cookie);
