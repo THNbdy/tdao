@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T岛 · 旧版</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #fff; color: #000; font-size: 14px; max-width: 800px; margin: 0 auto; }
+h1 { font-size: 24px; margin: 0 0 5px 0; }
+h2 { font-size: 18px; margin: 20px 0 10px 0; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+h3 { font-size: 16px; margin: 15px 0 8px 0; }
+a { color: #0000ff; text-decoration: underline; cursor: pointer; }
+.top-bar { background: #eee; padding: 10px; border: 1px solid #ccc; margin-bottom: 15px; }
+.top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.cookie-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: #fff; padding: 8px; border: 1px solid #ddd; }
+.cookie-row input { flex: 1 1 200px; margin: 0; }
+.container { border: 1px solid #999; padding: 10px; margin-bottom: 15px; background: #fafafa; }
+input, textarea { border: 1px solid #999; padding: 4px; font-family: Arial; font-size: 13px; width: 100%; box-sizing: border-box; }
+button { padding: 4px 10px; font-family: Arial; font-size: 13px; cursor: pointer; border: 1px solid #999; background: #eee; }
+button:hover { background: #ddd; }
+.post { border-bottom: 1px solid #ccc; padding: 10px 0; }
+.post h3 { margin: 0 0 5px 0; }
+.reply { margin-left: 20px; border-bottom: 1px dashed #ccc; padding: 8px 0; background: #fff; }
+.meta { color: #666; font-size: 12px; }
+.msg { color: #c00; margin: 5px 0; font-size: 13px; font-weight: bold; }
+.msg.success { color: #080; }
+.warn { color: #c00; }
+.required { color: #c00; }
+.no-title { color: #999; }
+img.pic { max-width: 300px; border: 1px solid #999; margin: 5px 5px 0 0; }
+img.preview { max-width: 80px; border: 1px solid #999; margin: 3px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-row">
+        <div><strong>T岛 旧版</strong> | <a href="index.html">回到新版</a></div>
+        <div>
+            当前状态：<strong id="cookieStatus" style="color:#0000ff;">无饼干</strong>
+            <button onclick="claimCookie()" id="claimBtn">获取新饼干</button>
+        </div>
+    </div>
+    <!-- 新增：填饼干的文本框 -->
+    <div class="cookie-row">
+        <span>填入已有饼干：</span>
+        <input type="text" id="cookieInput" placeholder="8位字符#32位字符">
+        <button onclick="saveCookie()" style="background:#cce5ff; border-color:#0000ff;">保存</button>
+        <button onclick="clearCookie()" style="background:#ffcccc; border-color:#c00; color:#c00;">清除</button>
+    </div>
+</div>
+
+<div class="container">
+    <h2>发表新帖</h2>
+    <div id="postMsg" class="msg"></div>
+    <p>标题（可选）：<br><input type="text" id="title" value=""></p>
+    <p><span class="required">正文（必填）：</span><br><textarea id="content" rows="4"></textarea></p>
+    <p>昵称（可选）：<br><input type="text" id="author" value=""></p>
+    <p>图片直链（可选，每行一个或逗号分隔）：<br><textarea id="imageUrls" rows="2"></textarea></p>
+    <div id="imagePreview"></div>
+    <p><button onclick="submitPost()">发布</button></p>
+</div>
+
+<div class="container" id="listContainer">
+    <h2>帖子列表</h2>
+    <div id="posts"><p class="meta">正在加载数据...</p></div>
+</div>
+
+<div class="container" id="postDetail" style="display:none;">
+    <h2><a href="javascript:void(0)" onclick="showPostList()">&lt; 返回列表</a></h2>
+    <div id="detailTitle" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;"></div>
+    <div id="detailMedia"></div>
+    <div id="detailContent"></div>
+    <div id="replies"></div>
+    <h3>发表回复</h3>
+    <div id="replyMsg" class="msg"></div>
+    <p><textarea id="replyContent" rows="3"></textarea></p>
+    <p>昵称（可选）：<input type="text" id="replyAuthor" value=""></p>
+    <p>图片直链（可选）：<textarea id="replyImageUrls" rows="2"></textarea></p>
+    <div id="replyImagePreview"></div>
+    <p><button onclick="submitReply()">提交回复</button></p>
+</div>
+
+<script>
+// ============ 基础工具 ============
+var memoryStore = {};
+function storageGet(key) { try { return localStorage.getItem(key); } catch (e) { return memoryStore[key] || null; } }
+function storageSet(key, val) { try { localStorage.setItem(key, val); return true; } catch (e) { memoryStore[key] = val; return false; } }
+function storageRemove(key) { try { localStorage.removeItem(key); } catch(e){} delete memoryStore[key]; }
+
+function esc(s) {
+    if (s === null || s === undefined) s = '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function trim(s) { return s === null || s === undefined ? '' : String(s).replace(/^\s+|\s+$/g, ''); }
+function formatDateTime(ts) {
+    var d = new Date(ts);
+    var pad = function(n){ return n < 10 ? '0' + n : n; };
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+async function safeParseJson(res) {
+    const text = await res.text();
+    if (!text) { if (res.status >= 400) throw new Error(`服务器错误 (${res.status})`); return {}; }
+    try { return JSON.parse(text); } catch (e) { throw new Error(`数据格式错误`); }
+}
+
+// ============ 饼干管理 ============
+function updateCookieUI() {
+    var c = storageGet('tdao_cookie');
+    var el = document.getElementById('cookieStatus');
+    var btn = document.getElementById('claimBtn');
+    var input = document.getElementById('cookieInput');
+    
+    if (c) {
+        var id = c.split('#')[0];
+        el.textContent = '已绑定：' + id;
+        el.style.color = '#080';
+        if (btn) btn.style.display = 'none';
+        if (input) input.value = c; // 把完整代码放进输入框
+    } else {
+        el.textContent = '无饼干';
+        el.style.color = '#c00';
+        if (btn) btn.style.display = 'inline-block';
+        if (input) input.value = '';
+    }
+}
+
+async function claimCookie() {
+    if (storageGet('tdao_cookie')) {
+        alert('你已经有一块饼干了，请先清除！'); return;
+    }
+    try {
+        const res = await fetch('/api?action=claim_cookie');
+        const data = await safeParseJson(res);
+        if (!res.ok) throw new Error(data.error || '领取失败');
+        storageSet('tdao_cookie', data.cookie);
+        alert('获取成功！\n你的饼干：' + data.cookie);
+        updateCookieUI();
+    } catch (err) {
+        alert('获取失败：' + err.message);
+    }
+}
+
+function saveCookie() {
+    var input = document.getElementById('cookieInput');
+    var c = trim(input.value);
+    if (c === '') { clearCookie(); return; }
+    if (!/^[a-zA-Z0-9]{8}#[a-zA-Z0-9]{32}$/.test(c)) { 
+        alert('格式不正确，应为 8位字符#32位字符'); return; 
+    }
+    storageSet('tdao_cookie', c);
+    updateCookieUI();
+    alert('饼干已保存到本地浏览器！');
+}
+
+function clearCookie() {
+    if (!confirm('确定要清除本地饼干吗？清除后无法发帖。')) return;
+    storageRemove('tdao_cookie');
+    updateCookieUI();
+}
+
+// ============ 图片处理 ============
+var ALLOWED_IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+function looksLikeImageUrl(url) {
+    var path = String(url).split('#')[0].split('?')[0].toLowerCase();
+    var m = path.match(/\.([a-z0-9]+)$/);
+    if (!m) return true;
+    for (var i = 0; i < ALLOWED_IMAGE_EXTS.length; i++) { if (m[1] === ALLOWED_IMAGE_EXTS[i]) return true; }
+    return false;
+}
+function parseImageUrls(text) {
+    var result = { urls: [], invalid: [] };
+    if (!text) return result;
+    var parts = String(text).split(/[\n,]+/);
+    for (var i = 0; i < parts.length; i++) {
+        var u = trim(parts[i]);
+        if (!u) continue;
+        if (!/^https?:\/\/[^\s]+$/i.test(u)) { result.invalid.push(u); continue; }
+        if (!looksLikeImageUrl(u)) { result.invalid.push(u); continue; }
+        if (result.urls.indexOf(u) === -1) result.urls.push(u);
+    }
+    return result;
+}
+function handleImgError(img) {
+    img.style.display = 'none';
+    var span = document.createElement('span');
+    span.className = 'warn';
+    span.appendChild(document.createTextNode('[图片加载失败] '));
+    if (img.parentNode) img.parentNode.insertBefore(span, img.nextSibling);
+}
+function renderMedia(urls) {
+    if (!urls || urls.length === 0) return '';
+    var out = '';
+    for (var i = 0; i < urls.length; i++) { out += '<img class="pic" src="' + esc(urls[i]) + '" onerror="handleImgError(this)">'; }
+    return out;
+}
+function bindImagePreview(inputId, previewId) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    input.onchange = input.onkeyup = function () {
+        var parsed = parseImageUrls(input.value);
+        var out = '';
+        if (parsed.invalid.length) out += '<p class="warn">无效链接：' + esc(parsed.invalid.join('、')) + '</p>';
+        var limit = parsed.urls.length < 6 ? parsed.urls.length : 6;
+        for (var i = 0; i < limit; i++) out += '<img class="preview" src="' + esc(parsed.urls[i]) + '" onerror="handleImgError(this)">';
+        if (parsed.urls.length > 6) out += '<p class="meta">还有 ' + (parsed.urls.length - 6) + ' 张未预览</p>';
+        document.getElementById(previewId).innerHTML = out;
+    };
+}
+
+// ============ 数据交互与渲染 ============
+var posts = [];
+var submitting = false;
+
+function getDisplayCookie(cookie) {
+    if (!cookie) return '无名氏';
+    var c = String(cookie); var id = c.split('#')[0];
+    if (id.indexOf('super_') === 0) return '<span style="color:red;font-weight:bold;">' + esc(id.slice(6) || 'Super') + ' [超管]</span>';
+    if (id.indexOf('admin_') === 0) return '<span style="color:red;font-weight:bold;">' + esc(id.slice(6) || 'Admin') + ' [管理]</span>';
+    if (id === 'admin') return '<span style="color:red;font-weight:bold;">Admin [管理]</span>';
+    if (id.indexOf('mod_') === 0) return '<span style="color:red;font-weight:bold;">' + esc(id.slice(4) || '版主') + ' [管理]</span>';
+    if (id === 'mod') return '<span style="color:red;font-weight:bold;">版主 [管理]</span>';
+    return esc(id);
+}
+
+function fetchPosts() {
+    fetch('/api?action=posts')
+        .then(res => safeParseJson(res))
+        .then(data => {
+            if (Array.isArray(data)) {
+                posts = data;
+                renderPosts();
+            }
+        })
+        .catch(err => {
+            document.getElementById('posts').innerHTML = '<p class="warn">加载失败：' + err.message + '</p>';
+        });
+}
+
+function renderPosts() {
+    var html = '';
+    for (var i = 0; i < posts.length; i++) {
+        var post = posts[i];
+        var hasImages = post.images && post.images.length > 0;
+        var content = post.content ? String(post.content) : '';
+        var titleClass = (post.title && trim(post.title) !== '') ? '' : ' class="no-title"';
+        
+        html += '<div class="post">'
+            + '<h3><a href="javascript:void(0)"' + titleClass + ' onclick="showPostDetail(' + i + ')">' + (post.is_pinned ? '[置顶] ' : '') + esc(post.title || '无标题') + '</a></h3>'
+            + '<p class="meta">' + getDisplayCookie(post.cookie) + ' · ' + formatDateTime(post.created_at) + ' · No.' + post.global_id + '</p>'
+            + '<p>' + esc(content.slice(0, 80)) + (content.length > 80 ? '...' : '') + '</p>'
+            + '<button onclick="showPostDetail(' + i + ', true)">回复</button>'
+            + '</div>';
+    }
+    if (!posts.length) html = '<p class="meta">暂无帖子，来发第一条。</p>';
+    document.getElementById('posts').innerHTML = html;
+}
+
+function submitPost() {
+    if (submitting) return;
+    var msg = document.getElementById('postMsg');
+    msg.innerHTML = ''; msg.className = 'msg';
+    
+    if (!storageGet('tdao_cookie')) { msg.innerHTML = '发帖失败：请先在上方获取或填入饼干。'; return; }
+
+    var title = trim(document.getElementById('title').value);
+    var content = trim(document.getElementById('content').value);
+    var author = trim(document.getElementById('author').value);
+    var imageText = document.getElementById('imageUrls').value;
+
+    if (!content) { msg.innerHTML = '发帖失败：正文不能为空。'; return; }
+    var parsed = parseImageUrls(imageText);
+    if (parsed.invalid.length) { msg.innerHTML = '发帖失败：图片链接无效。'; return; }
+
+    submitting = true;
+    fetch('/api?action=post', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, content: content, author: author, images: parsed.urls, cookie: storageGet('tdao_cookie') })
+    })
+    .then(res => safeParseJson(res))
+    .then(data => {
+        if (!data.ok) throw new Error(data.error || '发帖失败');
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('imageUrls').value = '';
+        document.getElementById('imagePreview').innerHTML = '';
+        msg.innerHTML = '发帖成功。';
+        msg.className = 'msg success';
+        fetchPosts();
+    })
+    .catch(err => { msg.innerHTML = '发帖失败：' + err.message; })
+    .finally(() => { submitting = false; });
+}
+
+function showPostDetail(index, scrollToReply) {
+    document.getElementById('listContainer').style.display = 'none';
+    document.getElementById('postDetail').style.display = 'block';
+
+    var post = posts[index];
+    document.getElementById('detailTitle').innerHTML = (post.is_pinned ? '<span style="color:blue;font-size:12px;">[置顶]</span> ' : '') + esc(post.title || '无标题');
+    document.getElementById('detailContent').innerHTML =
+        '<p class="meta">' + getDisplayCookie(post.cookie) + ' · ' + formatDateTime(post.created_at) + ' · No.' + post.global_id + '</p>'
+        + '<p>' + esc(post.content) + '</p>';
+    document.getElementById('detailMedia').innerHTML = renderMedia(post.images);
+
+    var html = '<hr><h3>回复列表</h3>';
+    if (!post.replies || !post.replies.length) html += '<p class="meta">暂无回复</p>';
+    else {
+        for (var ri = 0; ri < post.replies.length; ri++) {
+            var r = post.replies[ri];
+            html += '<div class="reply">'
+                + '<p class="meta">' + getDisplayCookie(r.cookie) + ' · ' + formatDateTime(r.created_at) + ' · No.' + r.global_id + '</p>'
+                + '<p>' + esc(r.content) + '</p>'
+                + renderMedia(r.images)
+                + '</div>';
+        }
+    }
+    document.getElementById('replies').innerHTML = html;
+
+    document.getElementById('postDetail').setAttribute('data-index', String(index));
+    if (scrollToReply) document.getElementById('replyContent').focus();
+}
+
+function submitReply() {
+    if (submitting) return;
+    var msg = document.getElementById('replyMsg');
+    msg.innerHTML = ''; msg.className = 'msg';
+
+    if (!storageGet('tdao_cookie')) { msg.innerHTML = '回复失败：请先在上方获取或填入饼干。'; return; }
+
+    var idxAttr = document.getElementById('postDetail').getAttribute('data-index');
+    if (idxAttr === null || idxAttr === '') return;
+    var index = parseInt(idxAttr, 10);
+    var postId = posts[index].id;
+
+    var content = trim(document.getElementById('replyContent').value);
+    var author = trim(document.getElementById('replyAuthor').value);
+    var imageText = document.getElementById('replyImageUrls').value;
+
+    if (!content) { msg.innerHTML = '回复失败：正文不能为空。'; return; }
+    var parsed = parseImageUrls(imageText);
+    if (parsed.invalid.length) { msg.innerHTML = '回复失败：图片链接无效。'; return; }
+
+    submitting = true;
+    fetch('/api?action=reply&post_id=' + postId, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content, author: author, images: parsed.urls, cookie: storageGet('tdao_cookie') })
+    })
+    .then(res => safeParseJson(res))
+    .then(data => {
+        if (!data.ok) throw new Error(data.error || '回复失败');
+        msg.innerHTML = '回复成功。'; msg.className = 'msg success';
+        document.getElementById('replyContent').value = '';
+        document.getElementById('replyAuthor').value = '';
+        document.getElementById('replyImageUrls').value = '';
+        document.getElementById('replyImagePreview').innerHTML = '';
+        fetchPosts();
+        setTimeout(function() { showPostDetail(index); }, 300);
+    })
+    .catch(err => { msg.innerHTML = '回复失败：' + err.message; })
+    .finally(() => { submitting = false; });
+}
+
+function showPostList() {
+    document.getElementById('listContainer').style.display = 'block';
+    document.getElementById('postDetail').style.display = 'none';
+    fetchPosts();
+}
+
+window.onload = function () {
+    updateCookieUI();
+    bindImagePreview('imageUrls', 'imagePreview');
+    bindImagePreview('replyImageUrls', 'replyImagePreview');
+    fetchPosts();
+};
+</script>
+</body>
+</html>
