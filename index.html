@@ -797,7 +797,8 @@
 
         async function checkAdminStatus() {
             try {
-                const res = await fetch('/api?action=me'); const data = await safeParseJson(res);
+                const c = storageGet('tdao_cookie');
+                const res = await fetch('/api?action=me&cookie=' + encodeURIComponent(c || '')); const data = await safeParseJson(res);
                 currentRole = data.role || 'guest'; if (data.cookie) storageSet('tdao_cookie', data.cookie);
                 updateAdminUI(); updateCookieUI();
                 if (currentView === 'list') renderPosts(); else if (currentView === 'detail') showPostDetail(currentDetailIndex);
@@ -825,7 +826,7 @@
                 if (data.cookie) storageSet('tdao_cookie', data.cookie);
                 currentRole = data.role; document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
                 updateAdminUI(); updateCookieUI(); showMsg('loginMsg', '登录成功', 'success');
-                setTimeout(closeLoginDialog, 900); checkAdminStatus();
+                setTimeout(closeLoginDialog, 900); checkAdminStatus(); fetchPosts(renderPosts);
             } catch (err) { showMsg('loginMsg', err.message, 'error'); }
         }
 
