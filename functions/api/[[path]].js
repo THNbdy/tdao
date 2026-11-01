@@ -22,7 +22,7 @@ export async function onRequest(context) {
     const ctx = {
       request, env, url, body, method,
       ipHash: await sha256Hex(request.headers.get('CF-Connecting-IP') || ''),
-      cookieRaw: getCookie(request, 'tdao_cookie') || body.cookie || '',
+      cookieRaw: getCookie(request, 'tdao_cookie') || body.cookie || url.searchParams.get('cookie') || '',
     };
 
     switch (action) {
