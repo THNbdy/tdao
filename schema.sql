@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, global_id INTEGER NOT NULL UNIQUE, title TEXT NOT NULL DEFAULT '',
+  content TEXT NOT NULL, author TEXT NOT NULL DEFAULT '', images TEXT NOT NULL DEFAULT '[]',
+  cookie_id TEXT NOT NULL, ip_hash TEXT NOT NULL DEFAULT '', is_hidden INTEGER NOT NULL DEFAULT 0, 
+  is_pinned INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_posts_global ON posts(global_id);
+
+CREATE TABLE IF NOT EXISTS replies (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, global_id INTEGER NOT NULL, post_id INTEGER NOT NULL,
+  content TEXT NOT NULL, author TEXT NOT NULL DEFAULT '', images TEXT NOT NULL DEFAULT '[]',
+  cookie_id TEXT NOT NULL, ip_hash TEXT NOT NULL DEFAULT '', is_hidden INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_replies_post ON replies(post_id);
+
+CREATE TABLE IF NOT EXISTS cookies (
+  id TEXT PRIMARY KEY, secret TEXT NOT NULL UNIQUE, role TEXT NOT NULL DEFAULT 'user',
+  display TEXT NOT NULL DEFAULT '', created_at INTEGER NOT NULL, expires_at INTEGER, banned INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS cookie_claims (
+  day TEXT NOT NULL, ip_hash TEXT NOT NULL, calls INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, ip_hash)
+);
+
+CREATE TABLE IF NOT EXISTS rate_limits (
+  bucket TEXT NOT NULL, window TEXT NOT NULL, calls INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (bucket, window)
+);
+
+CREATE TABLE IF NOT EXISTS bans (
+  type TEXT NOT NULL, val TEXT NOT NULL, expires_at INTEGER, PRIMARY KEY (type, val)
+);
+
+CREATE TABLE IF NOT EXISTS admin_sessions (
+  token TEXT PRIMARY KEY, cookie_id TEXT NOT NULL, expires_at INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS counters (
+  name TEXT PRIMARY KEY, value INTEGER NOT NULL DEFAULT 0
+);
+INSERT OR IGNORE INTO counters (name, value) VALUES ('global_post_id', 0);
