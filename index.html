@@ -55,26 +55,25 @@
     .user-btn.logged-in { color: var(--md-primary); }
     .user-btn.logged-in::after { content: ''; position: absolute; top: 9px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--md-error); border: 2px solid var(--md-surface-container); box-sizing: content-box; }
 
-    .main { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+    .main { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
     @media (min-width: 900px) { .banner-inner, .main { max-width: 1000px; } }
 
     .container { background: var(--md-surface-container-low); padding: 24px; margin-bottom: 24px; border-radius: 16px; }
     .container > *:first-child { margin-top: 0; }
-    .announcement { background: var(--md-surface-container); cursor: pointer; }
+    .announcement { background: var(--md-surface-container); cursor: pointer; transition: background-color 0.2s; }
     .announcement:hover { background: var(--md-surface-container-high); }
-    .announcement:active { transform: scale(0.98); background: var(--md-surface-container-highest); }
     .announcement-title { display: block; margin: 0 0 12px 0; font-weight: 500; color: var(--md-on-surface); font-size: 1.1em; line-height: 1.6; }
     .notice-badge { display: inline-block; background-color: var(--md-error); color: var(--md-on-error); font-size: 0.75em; padding: 4px 10px; border-radius: 8px; line-height: 1.2; font-weight: 500; vertical-align: middle; margin-right: 8px; transform: translateY(-1px); }
     .pin-badge { display: inline-block; background-color: var(--md-primary); color: var(--md-on-primary); font-size: 0.75em; padding: 4px 10px; border-radius: 8px; line-height: 1.2; font-weight: 500; vertical-align: middle; margin-right: 8px; transform: translateY(-1px); }
+    .po-badge { display: inline-block; background-color: #388e3c; color: #ffffff; font-size: 0.75em; padding: 2px 6px; border-radius: 8px; line-height: 1.2; font-weight: 500; vertical-align: middle; margin-left: 6px; }
     .admin-name { color: var(--md-error); font-weight: 500; }
 
-    .post { border-bottom: 1px solid var(--md-outline-variant); padding: 16px; border-radius: 12px; transition: background-color 0.2s; }
+    .post { border-bottom: 1px solid var(--md-outline-variant); padding: 16px 8px; border-radius: 12px; transition: background-color 0.2s; cursor: pointer; }
     .post:hover { background: var(--md-surface-container); }
     .post:last-child { border-bottom: none; }
-    .post h3 { margin: 0 0 8px 0; cursor: pointer; font-weight: 500; color: var(--md-on-surface); }
-    .post h3:active { opacity: 0.7; }
+    .post h3 { margin: 0 0 8px 0; font-weight: 500; color: var(--md-on-surface); }
     .author-name { margin: 0 0 8px 0; font-size: 0.95em; font-weight: 500; color: var(--md-on-surface); }
-    .reply { margin-left: 24px; color: var(--md-on-surface-variant); padding: 12px 16px; background: var(--md-surface-container-lowest); border-radius: 12px; margin-top: 12px; margin-bottom: 12px; }
+    .reply { margin-left: 12px; color: var(--md-on-surface-variant); padding: 16px; background: var(--md-surface-container-lowest); border-radius: 12px; margin-top: 12px; margin-bottom: 12px; border-left: 3px solid var(--md-primary); }
     .reply-btn { background: var(--md-primary); color: var(--md-on-primary); font-size: 0.85em; padding: 8px 16px; }
     .media-item { display: block; max-width: 100%; height: auto; margin: 12px auto; border-radius: 12px; cursor: zoom-in; }
     
@@ -183,6 +182,10 @@
     .empty-state-box { text-align: center; padding: 48px 20px; color: var(--md-on-surface-variant); }
     .empty-state-box svg { opacity: 0.4; margin-bottom: 16px; }
 
+    .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 16px; background: var(--md-primary-container); color: var(--md-on-primary-container); display: flex; align-items: center; justify-content: center; box-shadow: var(--md2-shadow-2); cursor: pointer; z-index: 70; transition: transform 0.2s, box-shadow 0.2s; }
+    .fab:hover { transform: scale(1.05); box-shadow: var(--md2-shadow-3); }
+    .fab:active { transform: scale(0.95); }
+
     body.style-md2 .banner { background: var(--md-primary); color: var(--md-on-primary); border-radius: 0; box-shadow: var(--md2-shadow-1); }
     body.style-md2 .banner .page-title, body.style-md2 .banner .menu-btn { color: var(--md-on-primary); }
     body.style-md2 .banner .menu-btn:hover { background: rgba(255,255,255,0.12); }
@@ -193,7 +196,7 @@
     body.style-md2 .announcement:hover { box-shadow: var(--md2-shadow-2); }
     body.style-md2 .announcement:active { transform: none; }
     body.style-md2 .post, body.style-md2 .reply, body.style-md2 .media-item, body.style-md2 .image-preview-box img { border-radius: 4px; }
-    body.style-md2 .notice-badge, body.style-md2 .pin-badge, body.style-md2 .mod-badge, body.style-md2 .vip-badge { border-radius: 2px; transform: none; }
+    body.style-md2 .notice-badge, body.style-md2 .pin-badge, body.style-md2 .mod-badge, body.style-md2 .vip-badge, body.style-md2 .po-badge { border-radius: 2px; transform: none; }
     body.style-md2 .report-box, body.style-md2 .msg-bar { border-radius: 4px; }
     body.style-md2 .drawer { border-radius: 0; box-shadow: var(--md2-shadow-3); }
     body.style-md2 .drawer-header { background: var(--md-primary); color: var(--md-on-primary); box-shadow: var(--md2-shadow-1); z-index: 2; }
@@ -226,7 +229,9 @@
     body.style-md2 .color-swatch:active { background: var(--sw, var(--md-primary)); transform: none; }
     body.style-md2 .color-swatch.active { box-shadow: 0 0 0 2px var(--md-surface-container-low), 0 0 0 4px var(--md-primary); }
     body.style-md2 .hue-strip, body.style-md2 .hue-thumb, body.style-md2 .hue-preview { border-radius: 4px; }
+    body.style-md2 .fab { border-radius: 4px; }
 
+    .rainbow-animate { transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important; will-change: transform, border-color, box-shadow; }
     body.rainbow-mode { animation: rainbow-filter 3s linear infinite; }
     @keyframes rainbow-filter { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
 </style>
@@ -243,6 +248,7 @@
                 <div class="logo-tooltip">
                     始于 2025.3.30<br>
                     重构于 2026.10.25<br>
+                    上线于 2026.11.1<br>
                     Tomorrow everything will be fine.
                 </div>
             </div>
@@ -271,7 +277,6 @@
             <div class="drawer-nav">
                 <a href="javascript:void(0)" onclick="drawerGoHome()" id="nav-home"><svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>首页</span></a>
                 <a href="javascript:void(0)" onclick="drawerGoList()" id="nav-list"><svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg><span>版块</span></a>
-                <a href="javascript:void(0)" onclick="drawerGoPost()" id="nav-post"><svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>发帖</span></a>
                 <a href="javascript:void(0)" onclick="drawerGoSettings()" id="nav-settings"><svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span>设置</span></a>
                 <a href="javascript:void(0)" onclick="drawerGoReport()" id="nav-report"><svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span>举报</span></a>
             </div>
@@ -310,6 +315,10 @@
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </button>
         </div>
+    </div>
+
+    <div class="fab" onclick="drawerGoPost()" title="发帖">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
     </div>
 
     <div class="main">
@@ -356,16 +365,16 @@
         </div>
 
         <div class="container" id="postDetail" style="display:none;">
-            <h2 id="detailTitle"></h2>
+            <h2 id="detailTitle" style="margin-bottom: 16px;"></h2>
             <div id="detailContent"></div>
             <div id="detailMedia"></div>
-            <div id="replies"></div>
+            <div id="replies" style="margin-top: 24px;"></div>
 
-            <div id="replySection">
+            <div id="replySection" style="margin-top: 32px; border-top: 1px solid var(--md-outline-variant); padding-top: 24px;">
                 <h3>发表回复</h3>
                 <div id="replyForm">
                     <div id="replyMsg" class="msg-bar"></div>
-                    <textarea id="replyContent" rows="2" placeholder="回复正文（必填，最多 5000 字）" maxlength="5000"></textarea>
+                    <textarea id="replyContent" rows="3" placeholder="回复正文（必填，最多 5000 字）" maxlength="5000"></textarea>
                     <input type="text" id="replyAuthor" placeholder="昵称（可选，最多 50 字）" maxlength="50">
                     <label>图片直链<span class="optional-tag">（可选，每行一个或逗号分隔）</span></label>
                     <textarea id="replyImageUrls" rows="2" placeholder="https://example.com/pic.jpg"></textarea>
@@ -374,7 +383,7 @@
                 </div>
             </div>
 
-            <div class="btn-group" style="margin-top: 24px; border-top: 1px solid var(--md-outline-variant); padding-top: 24px;">
+            <div class="btn-group" style="margin-top: 24px;">
                 <button class="btn-outline" onclick="goBackFromDetail()" id="backBtn">返回</button>
                 <button class="btn-outline" onclick="sharePost()" id="shareBtn">分享链接</button>
             </div>
@@ -501,7 +510,7 @@
         <div class="footer-notice">
             本站无法保证用户张贴内容的可靠性，投资有风险，健康问题请遵医嘱。<br>
             <span style="display:inline-block; margin-top:8px;">联系：tdao_admin@qq.com</span><br>
-            <span id="versionText" onclick="onVersionTap()" style="cursor:text; user-select:none; display:inline-block; margin-top:4px;">T岛 Ver 1.0.0.20261101</span><br>
+            <span id="versionText" onclick="onVersionTap()" style="cursor:text; user-select:none; display:inline-block; margin-top:4px;">T岛 Ver 1.1.0.20261104</span><br>
             <span id="devHint" style="display:none; color:var(--md-on-surface-variant);"></span>
             ©2026 Digital Technology Mechanics (DTM) Group<br>All rights reserved.
         </div>
@@ -792,14 +801,19 @@
         }
 
         function fetchPosts(callback) {
-            fetch('/api?action=posts').then(res => safeParseJson(res)).then(data => { if (Array.isArray(data)) { rawPosts = data; posts = data.slice(); } if (callback) callback(); }).catch(err => console.error('拉取帖子失败:', err.message));
+            fetch('/api?action=posts').then(res => safeParseJson(res)).then(data => { 
+                if (Array.isArray(data)) { rawPosts = data; posts = data.slice(); } 
+                if (callback) callback(); 
+            }).catch(err => console.error('拉取帖子失败:', err.message));
         }
 
         async function checkAdminStatus() {
             try {
                 const c = storageGet('tdao_cookie');
-                const res = await fetch('/api?action=me&cookie=' + encodeURIComponent(c || '')); const data = await safeParseJson(res);
-                currentRole = data.role || 'guest'; if (data.cookie) storageSet('tdao_cookie', data.cookie);
+                const res = await fetch('/api?action=me&cookie=' + encodeURIComponent(c || '')); 
+                const data = await safeParseJson(res);
+                currentRole = data.role || 'guest'; 
+                if (data.cookie) storageSet('tdao_cookie', data.cookie);
                 updateAdminUI(); updateCookieUI();
                 if (currentView === 'list') renderPosts(); else if (currentView === 'detail') showPostDetail(currentDetailIndex);
             } catch (e) {}
@@ -817,17 +831,37 @@
         }
 
         async function adminLogin() {
-            clearMsg('loginMsg'); var u = document.getElementById('loginUser').value.trim(); var p = document.getElementById('loginPass').value;
+            clearMsg('loginMsg'); 
+            var u = document.getElementById('loginUser').value.trim(); 
+            var p = document.getElementById('loginPass').value.trim();
             if (!u || !p) { showMsg('loginMsg', '请输入账号密码', 'error'); return; }
             try {
-                const res = await fetch('/api?action=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: p }) });
-                const data = await safeParseJson(res); if (!res.ok) throw new Error(data.error || '登录失败');
-                if (!storageGet('tdao_cookie_backup') && storageGet('tdao_cookie')) storageSet('tdao_cookie_backup', storageGet('tdao_cookie'));
+                const res = await fetch('/api?action=login', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ username: u, password: p }) 
+                });
+                const data = await safeParseJson(res); 
+                if (!res.ok) throw new Error(data.error || '登录失败');
+                
+                if (!storageGet('tdao_cookie_backup') && storageGet('tdao_cookie')) 
+                    storageSet('tdao_cookie_backup', storageGet('tdao_cookie'));
+                
                 if (data.cookie) storageSet('tdao_cookie', data.cookie);
-                currentRole = data.role; document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
-                updateAdminUI(); updateCookieUI(); showMsg('loginMsg', '登录成功', 'success');
-                setTimeout(closeLoginDialog, 900); checkAdminStatus(); fetchPosts(renderPosts);
-            } catch (err) { showMsg('loginMsg', err.message, 'error'); }
+                
+                currentRole = data.role; 
+                document.getElementById('loginUser').value = ''; 
+                document.getElementById('loginPass').value = '';
+                
+                updateAdminUI(); 
+                updateCookieUI(); 
+                fetchPosts(renderPosts);
+                
+                showMsg('loginMsg', '登录成功', 'success');
+                setTimeout(closeLoginDialog, 900); 
+            } catch (err) { 
+                showMsg('loginMsg', err.message, 'error'); 
+            }
         }
 
         async function adminLogout() {
@@ -943,7 +977,8 @@
         async function loadStaffs() {
             if (currentRole !== 'super') return;
             try {
-                const res = await fetch('/api?action=get_staffs');
+                const c = storageGet('tdao_cookie');
+                const res = await fetch('/api?action=get_staffs&cookie=' + encodeURIComponent(c || ''));
                 const data = await safeParseJson(res);
                 if (!res.ok) throw new Error(data.error);
                 var html = '';
@@ -960,7 +995,8 @@
         async function deleteStaff(id) {
             if (!confirm('确定要撤销 ' + id + ' 的管理权限吗？')) return;
             try {
-                const res = await fetch('/api?action=delete_staff&id=' + encodeURIComponent(id), { method: 'POST' });
+                const c = storageGet('tdao_cookie');
+                const res = await fetch('/api?action=delete_staff&id=' + encodeURIComponent(id) + '&cookie=' + encodeURIComponent(c || ''), { method: 'POST' });
                 const data = await safeParseJson(res);
                 if (!res.ok) throw new Error(data.error);
                 alert('已撤销权限');
@@ -1014,7 +1050,13 @@
                 var htmlAuthor = (post.author && String(post.author).trim()) ? '<p class="author-name">' + esc(post.author) + '</p>' : '';
                 var htmlMeta = '<p class="meta" style="margin-top: 12px;">' + getDisplayCookie(post.cookie) + ' · ' + formatDateTime(post.created_at) + ' · No.' + post.global_id + '</p>';
                 var content = post.content ? String(post.content) : '';
-                html += '<div class="post">' + htmlTitle + htmlAuthor + '<p>' + esc(content.slice(0, 80)) + (content.length > 80 ? '...' : '') + '</p>' + htmlMeta + '</div>';
+                
+                html += '<div class="post" onclick="showPostDetail(' + i + ')">' 
+                    + htmlTitle 
+                    + htmlAuthor 
+                    + '<p>' + esc(content.slice(0, 80)) + (content.length > 80 ? '...' : '') + '</p>' 
+                    + htmlMeta 
+                    + '</div>';
             }
             el.innerHTML = html;
         }
@@ -1028,12 +1070,19 @@
                 var hiddenClass = post.is_hidden ? ' hidden-item' : '';
                 
                 var pinHtml = post.is_pinned ? '<span class="pin-badge">置顶</span>' : '';
-                var htmlTitle = titleIsEmpty(post) ? '' : '<h3 onclick="showPostDetail(' + i + ')">' + pinHtml + esc(displayTitle(post)) + '</h3>';
+                var htmlTitle = titleIsEmpty(post) ? '' : '<h3>' + pinHtml + esc(displayTitle(post)) + '</h3>';
                 var htmlAuthor = (post.author && String(post.author).trim()) ? '<p class="author-name">' + esc(post.author) + '</p>' : '';
                 var htmlMeta = '<p class="meta" style="margin-top: 12px;">' + getDisplayCookie(post.cookie) + ' · ' + formatDateTime(post.created_at) + ' · No.' + post.global_id + '</p>';
                 
-                html += '<div class="post' + hiddenClass + '">' + htmlTitle + htmlAuthor + '<p>' + esc(content.slice(0, 100)) + (content.length > 100 ? '...' : '') + '</p>' + (hasImages ? renderPreviewMedia(post.images) : '') + htmlMeta + '<div class="btn-group"><button class="reply-btn" onclick="showPostDetail(' + i + ', true)">回复</button>';
-                
+                html += '<div class="post' + hiddenClass + '" onclick="showPostDetail(' + i + ')">' 
+                    + htmlTitle 
+                    + htmlAuthor 
+                    + '<p>' + esc(content.slice(0, 100)) + (content.length > 100 ? '...' : '') + '</p>' 
+                    + (hasImages ? renderPreviewMedia(post.images) : '') 
+                    + htmlMeta 
+                    + '<div class="btn-group" onclick="event.stopPropagation()">'
+                    + '<button class="reply-btn" onclick="showPostDetail(' + i + ', true)">回复</button>';
+                    
                 if (currentRole === 'super' || currentRole === 'admin' || currentRole === 'mod') {
                     html += '<button class="btn-outline btn-sm" onclick="pinItem(' + post.id + ', ' + (post.is_pinned ? 0 : 1) + ', event)">' + (post.is_pinned ? '取消置顶' : '置顶') + '</button>';
                     if (!post.is_hidden) html += '<button class="btn-outline btn-sm" onclick="hideItem(\'post\', ' + post.id + ', event)">隐藏</button>';
@@ -1072,7 +1121,11 @@
                 const data = await safeParseJson(res); if (!res.ok) throw new Error(data.error || '发帖失败');
                 if (isGuest) markPostTime();
                 document.getElementById('title').value = ''; document.getElementById('content').value = ''; document.getElementById('author').value = ''; document.getElementById('imageUrls').value = ''; document.getElementById('imagePreview').innerHTML = '';
-                showView('list'); showMsg('postMsg', '发帖成功。', 'success');
+                
+                fetchPosts(() => {
+                    showView('list'); 
+                    showMsg('postMsg', '发帖成功。', 'success');
+                });
             } catch (err) { showMsg('postMsg', '发帖失败：' + err.message, 'error'); }
             submitting = false;
         }
@@ -1083,6 +1136,7 @@
             if (isTemplate) {
                 post = { title: '欢迎来到T岛，一个相对自由的小众匿名版论坛。', content: '在T岛发帖与回复无需登录账号，但每个用户的发言间隔为15秒，且需要领取饼干才能发言。', author: 'Admin', cookie: 'admin', global_id: '0', images: [], replies: [] };
             } else { post = posts[index]; }
+            if (!post) return;
             currentShareId = post.global_id;
 
             var titleEl = document.getElementById('detailTitle'); var titleHtml = '';
@@ -1093,7 +1147,7 @@
             var authorHtml = (!isTemplate && post.author && String(post.author).trim()) ? '<p class="author-name" style="font-size: 1.05em; margin-bottom: 12px;">' + esc(post.author) + '</p>' : '';
             var metaHtml = isTemplate ? '<p class="meta" style="margin-top: 24px;"><span class="mod-user">Admin <span class="mod-badge">管理</span></span> · 2026年10月30日 00:00:00 · No.0</p>' : '<p class="meta" style="margin-top: 24px;">' + getDisplayCookie(post.cookie) + ' · ' + formatDateTime(post.created_at) + ' · No.' + post.global_id + '</p>';
 
-            document.getElementById('detailContent').innerHTML = authorHtml + '<p>' + esc(post.content).replace(/\n/g, '<br>') + '</p>' + metaHtml;
+            document.getElementById('detailContent').innerHTML = authorHtml + '<p style="white-space: pre-wrap; line-height: 1.6;">' + esc(post.content) + '</p>' + metaHtml;
             document.getElementById('detailMedia').innerHTML = renderMedia(post.images);
 
             var replySection = document.getElementById('replySection');
@@ -1101,20 +1155,29 @@
                 document.getElementById('replies').innerHTML = ''; replySection.style.display = 'none'; document.getElementById('shareBtn').style.display = 'none';
             } else {
                 document.getElementById('shareBtn').style.display = 'inline-block';
-                var html = '<h3>回复</h3>';
-                if (!post.replies || !post.replies.length) html += '<p class="meta">暂无回复</p>';
+                var html = '<h3>回复列表</h3>';
+                if (!post.replies || !post.replies.length) html += '<p class="meta" style="margin-top:12px;">暂无回复</p>';
                 if (post.replies) {
                     for (var ri = 0; ri < post.replies.length; ri++) {
-                        var r = post.replies[ri]; var rHidden = r.is_hidden ? ' hidden-item' : '';
+                        var r = post.replies[ri]; 
+                        var rHidden = r.is_hidden ? ' hidden-item' : '';
                         var rAuthor = (r.author && String(r.author).trim()) ? '<p class="author-name">' + esc(r.author) + '</p>' : '';
-                        var rMeta = '<p class="meta" style="margin-top: 12px;">' + getDisplayCookie(r.cookie) + ' · ' + formatDateTime(r.created_at) + ' · No.' + r.global_id;
+                        
+                        var isPO = (r.cookie === post.cookie);
+                        var poHtml = isPO ? '<span class="po-badge">PO</span>' : '';
+
+                        var rMeta = '<p class="meta" style="margin-top: 12px;">' + getDisplayCookie(r.cookie) + poHtml + ' · ' + formatDateTime(r.created_at) + ' · No.' + r.global_id;
+                        
+                        rMeta += ' <button class="btn-outline btn-sm" style="margin-left: 8px; padding: 4px 10px;" onclick="quoteReply(' + index + ', ' + ri + ', event)">引用</button>';
+
                         if (currentRole === 'super' || currentRole === 'admin' || currentRole === 'mod') {
                             if (!r.is_hidden) rMeta += ' <button class="btn-outline btn-sm" onclick="hideItem(\'reply\', ' + r.id + ', event)">隐藏</button>';
                             rMeta += ' <button class="btn-outline btn-sm" onclick="banItem(\'' + r.ip_hash + '\', \'' + (r.cookie || '') + '\', event)">封禁</button>';
                         }
-                        if (currentRole === 'super') rMeta += ' <button class="delete-btn btn-sm" onclick="deleteReply(' + index + ', ' + ri + ', event)">彻底删除</button>';
-                        rMeta += ' <button class="btn-outline btn-sm" onclick="reportSpecific(' + r.global_id + ', event)">举报</button></p>';
-                        html += '<div class="reply' + rHidden + '">' + rAuthor + '<p>' + esc(r.content).replace(/\n/g, '<br>') + '</p>' + renderMedia(r.images) + rMeta + '</div>';
+                        if (currentRole === 'super') rMeta += ' <button class="delete-btn btn-sm" onclick="deleteReply(' + index + ', ' + ri + ', event)">删除</button>';
+                        rMeta += '</p>';
+                        
+                        html += '<div class="reply' + rHidden + '">' + rAuthor + '<p style="white-space: pre-wrap; line-height: 1.6;">' + esc(r.content) + '</p>' + renderMedia(r.images) + rMeta + '</div>';
                     }
                 }
                 if (currentRole === 'super' || currentRole === 'admin' || currentRole === 'mod') {
@@ -1131,6 +1194,16 @@
                 if (scrollToReply && document.getElementById('replyForm').scrollIntoView) document.getElementById('replyForm').scrollIntoView();
             }
             document.getElementById('postDetail').setAttribute('data-index', String(index));
+        }
+
+        function quoteReply(postIndex, replyIndex, event) {
+            if (event) event.stopPropagation();
+            var r = posts[postIndex].replies[replyIndex];
+            var quoteText = '>>No.' + r.global_id + ' ' + r.content.split('\n').join('\n> ') + '\n\n';
+            var textarea = document.getElementById('replyContent');
+            textarea.value = quoteText + textarea.value;
+            textarea.focus();
+            document.getElementById('replyForm').scrollIntoView({ behavior: 'smooth' });
         }
 
         function sharePost() {
@@ -1169,42 +1242,52 @@
                 const res = await fetch('/api?action=reply&post_id=' + postId, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: content, author: author, images: parsed.urls, cookie: storageGet('tdao_cookie') || '' }) });
                 const data = await safeParseJson(res); if (!res.ok) throw new Error(data.error || '回复失败');
                 if (isGuest) markPostTime();
-                showPostDetail(index); document.getElementById('replyContent').value = ''; document.getElementById('replyAuthor').value = ''; document.getElementById('replyImageUrls').value = ''; document.getElementById('replyImagePreview').innerHTML = '';
-                showMsg('replyMsg', '回复成功。', 'success');
+                
+                document.getElementById('replyContent').value = ''; document.getElementById('replyAuthor').value = ''; document.getElementById('replyImageUrls').value = ''; document.getElementById('replyImagePreview').innerHTML = '';
+                
+                fetchPosts(() => {
+                    showPostDetail(index);
+                    showMsg('replyMsg', '回复成功。', 'success');
+                });
             } catch (err) { showMsg('replyMsg', '回复失败：' + err.message, 'error'); }
             submitting = false;
         }
 
         async function pinItem(id, pin, event) {
             if (event) event.stopPropagation();
-            const res = await fetch(`/api?action=pin_post&id=${id}&pin=${pin}`, { method: 'POST' });
+            const c = storageGet('tdao_cookie');
+            const res = await fetch(`/api?action=pin_post&id=${id}&pin=${pin}&cookie=${encodeURIComponent(c || '')}`, { method: 'POST' });
             if (res.ok) fetchPosts(() => { if (currentView === 'list') renderPosts(); else if (currentView === 'detail') showPostDetail(currentDetailIndex); });
             else alert('操作失败');
         }
 
         async function hideItem(type, id, event) {
             if (event) event.stopPropagation(); if (!confirm('确定要隐藏该内容吗？')) return;
-            const res = await fetch(`/api?action=hide_${type}&id=${id}`, { method: 'POST' });
+            const c = storageGet('tdao_cookie');
+            const res = await fetch(`/api?action=hide_${type}&id=${id}&cookie=${encodeURIComponent(c || '')}`, { method: 'POST' });
             if (res.ok) fetchPosts(() => { if (currentView === 'list') renderPosts(); else if (currentView === 'detail') showPostDetail(currentDetailIndex); });
         }
 
         async function banItem(ip, cookie, event) {
             if (event) event.stopPropagation(); if (!confirm(`确定封禁此人吗？\nIP: ${ip}\n饼干: ${cookie || '无'}\n此操作需慎重！`)) return;
-            await fetch(`/api?action=ban&type=ip&val=${encodeURIComponent(ip)}&days=7`, { method: 'POST' });
-            if (cookie) await fetch(`/api?action=ban&type=cookie&val=${encodeURIComponent(cookie)}&days=7`, { method: 'POST' });
+            const adminC = storageGet('tdao_cookie');
+            await fetch(`/api?action=ban&type=ip&val=${encodeURIComponent(ip)}&days=7&cookie=${encodeURIComponent(adminC || '')}`, { method: 'POST' });
+            if (cookie) await fetch(`/api?action=ban&type=cookie&val=${encodeURIComponent(cookie)}&days=7&cookie=${encodeURIComponent(adminC || '')}`, { method: 'POST' });
             alert('已封禁！');
         }
 
         async function deletePost(index, event) {
             if (event) event.stopPropagation(); if (!confirm('确定彻底删除这个帖子吗？（不可恢复）')) return;
             var postId = posts[index].id;
-            try { const res = await fetch('/api?action=delete_post&id=' + postId, { method: 'POST' }); if (res.ok) { if (currentView === 'detail') showView('list'); fetchPosts(renderPosts); } else { alert('删除失败'); } } catch (e) { alert('网络错误'); }
+            const c = storageGet('tdao_cookie');
+            try { const res = await fetch('/api?action=delete_post&id=' + postId + '&cookie=' + encodeURIComponent(c || ''), { method: 'POST' }); if (res.ok) { if (currentView === 'detail') showView('list'); fetchPosts(renderPosts); } else { alert('删除失败'); } } catch (e) { alert('网络错误'); }
         }
 
         async function deleteReply(postIndex, replyIndex, event) {
             if (event) event.stopPropagation(); if (!confirm('确定彻底删除这条回复吗？（不可恢复）')) return;
             var replyId = posts[postIndex].replies[replyIndex].id;
-            try { const res = await fetch('/api?action=delete_reply&id=' + replyId, { method: 'POST' }); if (res.ok) fetchPosts(() => showPostDetail(postIndex)); else alert('删除失败'); } catch (e) { alert('网络错误'); }
+            const c = storageGet('tdao_cookie');
+            try { const res = await fetch('/api?action=delete_reply&id=' + replyId + '&cookie=' + encodeURIComponent(c || ''), { method: 'POST' }); if (res.ok) fetchPosts(() => showPostDetail(postIndex)); else alert('删除失败'); } catch (e) { alert('网络错误'); }
         }
 
         function showPostList() { showView('list'); fetchPosts(renderPosts); }
