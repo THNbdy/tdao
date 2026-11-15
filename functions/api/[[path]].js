@@ -188,9 +188,9 @@ async function claimCookie(ctx) {
   if (staff && ['super', 'admin', 'mod'].includes(staff.role)) throw new Error('管理账号不能领取饼干');
   const today = utcDay();
   const perIp = await env.DB.prepare(`INSERT INTO cookie_claims (day, ip_hash, calls) VALUES (?, ?, 1) ON CONFLICT(day, ip_hash) DO UPDATE SET calls = calls + 1 RETURNING calls`).bind(today, ipHash).first();
-  if (perIp.calls > 1) throw new Error('今天已经领取过饼干，请 24 小时后再来');
+  if (perIp.calls > 1) throw new Error('今天已经领取过饼干，请明天再来');
   const globalRow = await env.DB.prepare(`INSERT INTO cookie_claims (day, ip_hash, calls) VALUES (?, '*', 1) ON CONFLICT(day, ip_hash) DO UPDATE SET calls = calls + 1 RETURNING calls`).bind(today).first();
-  if (globalRow.calls > 50) throw new Error('今日饼干已发完，明天再来吧');
+  if (globalRow.calls > 50) throw new Error('今日饼干已发完，请明天再来');
   const id = randomAlphaNum(8), secret = randomAlphaNum(32);
   await env.DB.prepare('INSERT INTO cookies (id, secret, role, created_at) VALUES (?, ?, ?, ?)').bind(id, secret, 'user', Date.now()).run();
   return { cookie: `${id}#${secret}` };
